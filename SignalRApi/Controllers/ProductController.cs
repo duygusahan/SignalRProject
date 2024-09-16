@@ -38,6 +38,7 @@ namespace SignalRApi.Controllers
                 ImageUrl= createProductDto.ImageUrl,
                 Price= createProductDto.Price,
                 Status= createProductDto.Status,
+               CategoryId=createProductDto.CategoryId, 
             });
             return Ok("İşleminiz başarıyla gerçekleşti");
         }
@@ -61,6 +62,7 @@ namespace SignalRApi.Controllers
                 ImageUrl= updateProductDto.ImageUrl,
                 Price= updateProductDto.Price,
                 ProductId= updateProductDto.ProductId,
+                CategoryId = updateProductDto.CategoryId,
             });
             return Ok("İşleminiz başarıyla gerçekleşti");
         }
