@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalRProject.BusinessLayer.Abstract;
+using SignalRProject.DtoLayer.CategoryDtos;
 using SignalRProject.DtoLayer.ProductDtos;
 using SignalRProject.EntityLayer.Concrete;
 
@@ -11,30 +13,32 @@ namespace SignalRApi.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
+        private readonly IMapper mapper;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, IMapper mapper)
         {
             _productService = productService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult ProductList()
         {
-            var value = _productService.TGetListAll();
+            var value = mapper.Map<List<ResultProductDto>>(_productService.TGetListAll());
             return Ok(value);
         }
         [HttpPost]
         public IActionResult CreateProduct(CreateProductDto createProductDto)
         {
-            Product product= new Product()
+          
+            _productService.TInsert(new Product()
             {
-                Description = createProductDto.Description,
-                ImageUrl = createProductDto.ImageUrl,
-                Price = createProductDto.Price,
-                ProductName = createProductDto.ProductName,
-                Status = createProductDto.Status
-            };
-            _productService.TInsert(product);
+                ProductName= createProductDto.ProductName,
+                Description= createProductDto.Description,
+                ImageUrl= createProductDto.ImageUrl,
+                Price= createProductDto.Price,
+                Status= createProductDto.Status,
+            });
             return Ok("İşleminiz başarıyla gerçekleşti");
         }
 
@@ -48,16 +52,16 @@ namespace SignalRApi.Controllers
         [HttpPut]
         public IActionResult UpdateProduct(UpdateProductDto updateProductDto) 
         {
-            Product product = new Product()
+           
+            _productService.TUpdate(new Product()
             {
                 Status = updateProductDto.Status,
                 ProductName= updateProductDto.ProductName,
-                Description = updateProductDto.Description, 
-                ImageUrl = updateProductDto.ImageUrl,
+                Description= updateProductDto.Description,
+                ImageUrl= updateProductDto.ImageUrl,
                 Price= updateProductDto.Price,
-                ProductId= updateProductDto.ProductId   
-            };
-            _productService.TUpdate(product);
+                ProductId= updateProductDto.ProductId,
+            });
             return Ok("İşleminiz başarıyla gerçekleşti");
         }
 
@@ -66,6 +70,13 @@ namespace SignalRApi.Controllers
         {
             var value= _productService.TGetById(id);
             return Ok(value);
+        }
+
+        [HttpGet("GetProductsWithCategory")]
+        public IActionResult GetProductsWithCategory()
+        {
+            var values = _productService.TGetProductsWithCategory();
+            return Ok(values);
         }
     }
 }

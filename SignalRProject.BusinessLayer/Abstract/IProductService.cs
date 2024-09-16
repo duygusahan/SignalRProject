@@ -9,5 +9,6 @@ namespace SignalRProject.BusinessLayer.Abstract
 {
     public interface IProductService:IGenericService<Product>
     {
+        public List<Product> TGetProductsWithCategory();
     }
 }

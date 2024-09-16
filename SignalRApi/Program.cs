@@ -3,12 +3,15 @@ using SignalRProject.BusinessLayer.Concrete;
 using SignalRProject.DataAccessLayer.Abstract;
 using SignalRProject.DataAccessLayer.Context;
 using SignalRProject.DataAccessLayer.EntityFramework;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddDbContext<SignalRContext>();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
 builder.Services.AddScoped<IAboutService , AboutManager >();
 builder.Services.AddScoped<IAboutDal, EfAboutDal >();
 
@@ -26,6 +29,9 @@ builder.Services.AddScoped<IDiscountDal ,  EfDiscountDal >();
 
 builder.Services.AddScoped<IFeatureDal , EfFeatureDal >();
 builder.Services.AddScoped<IFeatureService , FeatureManager >();
+
+builder.Services.AddScoped<IProductDal , EfProductDal >();
+builder.Services.AddScoped<IProductService , ProductManager >();
 
 builder.Services.AddScoped<ISocialMediaDal , EfSocialMediaDal >();
 builder.Services.AddScoped<ISocialMediaService , SocialMediaManager >();
