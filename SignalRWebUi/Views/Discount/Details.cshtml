@@ -1,0 +1,60 @@
+﻿@model List<ResultDiscountDto>
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="main-panel">
+    <div class="content">
+        <div class="container-fluid">
+            <h4 class="page-title">Günün İndirimleri</h4>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Günün İndirimleri Listesi </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-sub">
+                                Günün İndirimleri ile ilgili işlemleri aşağıda geçekleştirebilirsiniz :
+
+                            </div>
+                            <table class="table mt-3">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Ürün</th>
+                                        <th scope="col">İndirim Oranı</th>
+
+                                        <th scope="col">Görsel</th>
+
+                                        <th scope="col">Açıklama</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.DiscountId</td>
+                                            <td>@item.Title</td>
+                                            <td>@item.Amount</td>
+
+                                            <td><img src="@item.ImageUrl" alt="Product Image" style="width: 100px; height: auto;" /></td>
+
+                                            <td>@item.Description</td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                            <a href="/Discount/Index" class="btn btn-outline-info">Geri Dön</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
