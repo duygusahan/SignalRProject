@@ -32,5 +32,12 @@ namespace SignalRProject.DataAccessLayer.EntityFramework
             }).ToList();
             return value;
         }
+
+        public int ProductCount()
+        {
+            using var context=new SignalRContext();
+            return context.Products.Count();
+
+        }
     }
 }

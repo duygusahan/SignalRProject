@@ -59,5 +59,11 @@ namespace SignalRApi.Controllers
             var value= _categoryService.TGetById(id);
             return Ok(value);
         }
+        [HttpGet("CategoryCount")]
+        public IActionResult CategoryCount()
+        {
+            var value = _categoryService.TCategoryCount();
+            return Ok(value);
+        }
     }
 }

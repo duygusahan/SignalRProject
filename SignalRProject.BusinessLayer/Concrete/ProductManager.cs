@@ -43,6 +43,11 @@ namespace SignalRProject.BusinessLayer.Concrete
             _productDal.Insert(entity);
         }
 
+        public int TProductCount()
+        {
+          return  _productDal.ProductCount();
+        }
+
         public void TUpdate(Product entity)
         {
             _productDal.Update(entity);
