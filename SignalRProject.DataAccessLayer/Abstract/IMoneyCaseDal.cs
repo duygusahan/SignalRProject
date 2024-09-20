@@ -7,14 +7,8 @@ using System.Threading.Tasks;
 
 namespace SignalRProject.DataAccessLayer.Abstract
 {
-    public interface IOrderDal:IGenericDal<Order>
+    public interface IMoneyCaseDal:IGenericDal<MoneyCase>
     {
-        int TotalOrderCount();
-        int ActiveOrderCount();
-        int PassiveOrderCount();
-
-        decimal LastOrderPrice();
-
-        decimal TodayTotalPrice();
+        decimal TotalMoneyCase();
     }
 }

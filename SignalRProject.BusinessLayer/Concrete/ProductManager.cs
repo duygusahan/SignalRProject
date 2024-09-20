@@ -40,6 +40,11 @@ namespace SignalRProject.BusinessLayer.Concrete
             return _productDal.GetProductsWithCategory();
         }
 
+        public decimal THamburgerPriceAvg()
+        {
+            return _productDal.HamburgerPriceAvg();
+        }
+
         public void TInsert(Product entity)
         {
             _productDal.Insert(entity);
