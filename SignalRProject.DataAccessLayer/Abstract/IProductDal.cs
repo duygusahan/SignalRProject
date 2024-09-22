@@ -23,6 +23,8 @@ namespace SignalRProject.DataAccessLayer.Abstract
 
         decimal HamburgerPriceAvg();
 
+        List<Product> Get9Products();
+
         
     }
 }

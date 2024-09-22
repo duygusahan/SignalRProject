@@ -25,6 +25,11 @@ namespace SignalRProject.BusinessLayer.Concrete
             _productDal.Delete(id);
         }
 
+        public List<Product> TGet9Products()
+        {
+            return _productDal.Get9Products();
+        }
+
         public Product TGetById(int id)
         {
            return _productDal.GetById(id);
