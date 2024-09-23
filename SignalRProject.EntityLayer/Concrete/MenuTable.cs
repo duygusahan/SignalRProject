@@ -11,5 +11,7 @@ namespace SignalRProject.EntityLayer.Concrete
         public int MenuTableID { get; set; }
         public string Name { get; set; }
         public bool status { get; set; }
+
+        public List<Basket> Baskets { get; set; }
     }
 }
