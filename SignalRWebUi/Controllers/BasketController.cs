@@ -13,17 +13,28 @@ namespace SignalRWebUi.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task< IActionResult> Index()
+        public async Task<IActionResult> Index()
         {
-            var client=_httpClientFactory.CreateClient();
+            var client = _httpClientFactory.CreateClient();
             var responseMessage = await client.GetAsync("https://localhost:7009/api/Basket/BasketListByMenuTableWithProductName?id=1");
-            if (responseMessage.IsSuccessStatusCode) 
+            if (responseMessage.IsSuccessStatusCode)
             {
-                var jsonData=await responseMessage.Content.ReadAsStringAsync();
+                var jsonData = await responseMessage.Content.ReadAsStringAsync();
                 var value = JsonConvert.DeserializeObject<List<ResultBasketDto>>(jsonData);
                 return View(value);
             }
             return View();
+        }
+
+        public async Task<IActionResult> DeleteBasket(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var responseMessage = await client.DeleteAsync("https://localhost:7009/api/Basket?id=" + id);
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            return NoContent();
         }
     }
 }
