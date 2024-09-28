@@ -32,6 +32,7 @@ namespace SignalRApi.Controllers
                 Name = createBookingDto.Name,
                 PersonCount = createBookingDto.PersonCount,
                 Phone = createBookingDto.Phone,
+                Description = createBookingDto.Description, 
                
 
             };
@@ -67,5 +68,20 @@ namespace SignalRApi.Controllers
             var value=_bookingService.TGetById(id);
             return Ok(value);
         }
-    }
+
+        [HttpGet("BookingStatusApproved")]
+        public IActionResult BookingStatusApproved(int id)
+        {
+           _bookingService.TBookingStatusApproved(id);
+            return Ok("Rezarvasyon Açıklaması Değiştirildi");
+        }
+
+		[HttpGet("BookingStatusCancelled")]
+		public IActionResult BookingStatusCancelled(int id)
+		{
+			_bookingService.TBookingStatusCancelled(id);
+			return Ok("Rezarvasyon Açıklaması Değiştirildi");
+		}
+
+	}
 }

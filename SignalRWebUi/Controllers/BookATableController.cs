@@ -24,6 +24,7 @@ namespace SignalRWebUi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBooking(CreateBookingDto createBookingDto)
         {
+            createBookingDto.Description = "Rezarvasyon Alındı";
             var client =_httpClientFactory.CreateClient();
             var jsonData=JsonConvert.SerializeObject(createBookingDto);
             StringContent stringContent = new StringContent(jsonData , Encoding.UTF8 , "application/json");
