@@ -25,6 +25,7 @@ namespace SignalRApi.Hubs
             _notificationsService = notificationsService;
         }
 
+        public static int clientCount { get; set; } = 0;
         public async Task SendStatistic()
         {
             var value = _categoryService.TCategoryCount();
@@ -110,6 +111,22 @@ namespace SignalRApi.Hubs
             await Clients.All.SendAsync("ReceiveMenuTableStatus", value);
         }
 
+        public async Task SendMessage(string user , string message)
+        {
+            await Clients.All.SendAsync("RecieveMessage" , user , message);
+        }
 
+        public override async Task OnConnectedAsync()
+        {
+            clientCount++;
+            await Clients.All.SendAsync("ReceiveClientCount", clientCount);
+            await base.OnConnectedAsync();
+        }
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            clientCount--;
+            await Clients.All.SendAsync("ReceiveClientCount", clientCount);
+            await base.OnDisconnectedAsync(exception);
+        }
     }
 }
