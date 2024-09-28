@@ -27,7 +27,38 @@ namespace SignalRWebUi.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Details()
+        [HttpGet]
+        public IActionResult CreateDiscount()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateDiscount(CreateDiscountDto createDiscountDto)
+        {
+            var client=_httpClientFactory.CreateClient();
+            var jsonData=JsonConvert.SerializeObject(createDiscountDto);
+            StringContent stringContent = new StringContent(jsonData , Encoding.UTF8 , "application/json");
+            var responseMessage = await client.PostAsync("https://localhost:7009/api/Discount", stringContent);
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
+        public async Task<IActionResult> DeleteDiscount(int id)
+        {
+            var client= _httpClientFactory.CreateClient();
+            var responseMessage = await client.DeleteAsync("" + id);
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
+
+		public async Task<IActionResult> Details()
         {
             var client = _httpClientFactory.CreateClient();
             var responseMessage = await client.GetAsync("https://localhost:7009/api/Discount");
@@ -66,6 +97,22 @@ namespace SignalRWebUi.Controllers
                 return RedirectToAction("Index");
             }
             return View();
+        }
+
+        public async Task<IActionResult> ChangeStatusToFalse(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            await client.GetAsync("https://localhost:7009/api/Discount/ChangeStatusToFalse?id=" + id);
+            return RedirectToAction("Index");
+
+        }
+
+        public async Task<IActionResult> ChangeStatusToTrue(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            await client.GetAsync("https://localhost:7009/api/Discount/ChangeStatusToTrue?id=" + id);
+            return RedirectToAction("Index");
+
         }
     }
 }
