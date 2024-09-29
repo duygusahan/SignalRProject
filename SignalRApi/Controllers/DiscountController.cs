@@ -77,5 +77,11 @@ namespace SignalRApi.Controllers
             _discountService.TChangeStatusToTrue(id);
             return Ok("Durum Değiştirildi");
         }
+        [HttpGet("GetDiscountByStatusTrue")]
+        public IActionResult GetDiscountByStatusTrue()
+        {
+           var value= _discountService.TGetDiscountByStatusTrue();
+            return Ok(value);
+        }
     }
 }

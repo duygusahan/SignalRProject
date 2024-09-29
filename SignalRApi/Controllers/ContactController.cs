@@ -52,6 +52,10 @@ namespace SignalRApi.Controllers
                 Location = updateContactDto.Location,
                 Mail = updateContactDto.Mail,
                 PhoneNumber = updateContactDto.PhoneNumber,
+                FooterTitle= updateContactDto.FooterTitle,
+                OpenDays= updateContactDto.OpenDays,
+                OpenDaysDescription= updateContactDto.OpenDaysDescription,
+                OpenHours= updateContactDto.OpenHours,
 
             };
             _contactService.TUpdate(contact);

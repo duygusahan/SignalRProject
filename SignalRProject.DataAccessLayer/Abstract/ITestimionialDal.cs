@@ -9,5 +9,8 @@ namespace SignalRProject.DataAccessLayer.Abstract
 {
     public interface ITestimionialDal:IGenericDal<Testimonial>
     {
+        List<Testimonial> GetTestimonialsByStatusTrue();
+        void ChangeStatusToTrueTestimonials(int id);
+        void ChangeStatusToFalseTestimonials(int id);
     }
 }

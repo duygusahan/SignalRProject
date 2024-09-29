@@ -31,5 +31,12 @@ namespace SignalRProject.DataAccessLayer.EntityFramework
             value.Status = true;
             context.SaveChanges();
         }
+
+        public List<Discount> GetDiscountByStatusTrue()
+        {
+            using var context = new SignalRContext();
+            var value = context.Discounts.Where(x=>x.Status==true).ToList();    
+            return value;
+        }
     }
 }

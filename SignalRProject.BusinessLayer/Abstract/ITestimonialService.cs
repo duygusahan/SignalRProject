@@ -9,5 +9,9 @@ namespace SignalRProject.BusinessLayer.Abstract
 {
     public interface ITestimonialService:IGenericService<Testimonial>
     {
+        List<Testimonial> TGetTestimonialsByStatusTrue();
+        void TChangeStatusToTrueTestimonials(int id);
+        
+        void TChangeStatusToFalseTestimonials(int id);
     }
 }

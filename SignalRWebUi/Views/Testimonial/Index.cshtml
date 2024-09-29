@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/AdminLayout/Index.cshtml";
+    int count = 0;
 }
 
 <div class="main-panel">
@@ -30,13 +31,17 @@
                                        
                                         <th scope="col">Sil</th>
                                         <th scope="col">Güncelle</th>
+                                        <th scope="col">Aktif Yap</th>
+                                        <th scope="col">Pasif Yap</th>
+                                       
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var item in Model)
                                     {
+                                        count++;
                                         <tr>
-                                            <td>@item.TestimonialId</td>
+                                            <td>@count</td>
                                             <td>@item.Name</td>
                                             <td>@item.Title</td>
                                             <td>@item.Comment</td>
@@ -44,7 +49,9 @@
                                             
                                             <td>@item.Status</td>
                                             <td><a href="/Testimonial/DeleteTestimonial/@item.TestimonialId" class="btn btn-outline-danger">Sil</a></td>
-                                            <td><a href="/Testimonial/UpdateTestimonial/@item.TestimonialId" class="btn btn-outline-success">Güncelle</a></td>
+                                            <td><a href="/Testimonial/ChangeStatusToTrue/@item.TestimonialId" class="btn btn-outline-success">Güncelle</a></td>
+                                            <td><a href="/Testimonial/ChangeStatusToTrue/@item.TestimonialId" class="btn btn-outline-info">Aktif</a></td>
+                                            <td><a href="/Testimonial/ChangeStatusToFalse/@item.TestimonialId" class="btn btn-outline-dark">Pasif</a></td>
                                         </tr>
                                     }
                                 </tbody>
