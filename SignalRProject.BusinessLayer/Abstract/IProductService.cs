@@ -26,5 +26,12 @@ namespace SignalRProject.BusinessLayer.Abstract
         decimal THamburgerPriceAvg();
 
         List<Product> TGet9Products();
+
+        decimal TSmokyBBQBurgerPrice();
+
+        decimal TTotalDrinkPrice();
+
+        decimal TTotalSaladPrice();
+        decimal TTotalProductPrice();
     }
 }

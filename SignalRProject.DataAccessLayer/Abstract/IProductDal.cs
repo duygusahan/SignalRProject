@@ -25,6 +25,16 @@ namespace SignalRProject.DataAccessLayer.Abstract
 
         List<Product> Get9Products();
 
+        decimal SmokyBBQBurgerPrice();
         
+        decimal TotalDrinkPrice();
+        decimal TotalSaladPrice();
+
+        decimal TotalProductPrice();
+
+      
+       
+
+
     }
 }
