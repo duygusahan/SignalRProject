@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalRProject.BusinessLayer.Abstract;
 using SignalRProject.DtoLayer.FeatureDtos;
@@ -11,31 +12,24 @@ namespace SignalRApi.Controllers
     public class FeatureController : ControllerBase
     {
         private readonly IFeatureService _featureService;
+        private readonly IMapper _mapper;
 
-        public FeatureController(IFeatureService featureService)
+        public FeatureController(IFeatureService featureService, IMapper mapper)
         {
             _featureService = featureService;
+            _mapper = mapper;
         }
         [HttpGet]
         public IActionResult ListFeature()
         {
             var value = _featureService.TGetListAll();
-            return Ok(value);
+            return Ok(_mapper.Map<List<ResultFeatureDto>>(value));
         }
         [HttpPost]
         public IActionResult CreateFeature(CreateFeatureDto createFeatureDto) 
         {
-            Feature feature = new Feature()
-            {
-                Description1 = createFeatureDto.Description1,
-                Description2 = createFeatureDto.Description2,
-                Description3 = createFeatureDto.Description3,
-                Title1 = createFeatureDto.Title1,
-                Title2 = createFeatureDto.Title2,
-                Title3 = createFeatureDto.Title3,
-                
-            };
-            _featureService.TInsert(feature);
+            var value=_mapper.Map<Feature>(createFeatureDto);
+            _featureService.TInsert(value);
             return Ok("İşleminiz başarıyla gerçekleşti");
         }
 
@@ -48,17 +42,8 @@ namespace SignalRApi.Controllers
         [HttpPut]
         public IActionResult UpdateFeature(UpdateFeatureDto updateFeatureDto) 
         {
-            Feature feature = new Feature()
-            {
-                Description1=updateFeatureDto.Description1,
-                Description2=updateFeatureDto.Description2,
-                Description3 = updateFeatureDto.Description3,
-                Title1 = updateFeatureDto.Title1,
-                Title2 = updateFeatureDto.Title2,
-                Title3 = updateFeatureDto.Title3,
-                FeatureId=updateFeatureDto.FeatureId
-            };
-            _featureService.TUpdate(feature);
+            var value=_mapper.Map<Feature>(updateFeatureDto);
+            _featureService.TUpdate(value);
             return Ok("İşleminiz başarıyla gerçekleşti");
         }
 
@@ -66,7 +51,7 @@ namespace SignalRApi.Controllers
         public IActionResult GetFeature(int id) 
         {
             var value=_featureService.TGetById(id);
-            return Ok(value);
+            return Ok(_mapper.Map<GetFeatureDto>(value));
         }
 
 

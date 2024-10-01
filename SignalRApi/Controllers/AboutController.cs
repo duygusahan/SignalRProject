@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalRProject.BusinessLayer.Abstract;
 using SignalRProject.DtoLayer.AboutDto;
@@ -11,29 +12,24 @@ namespace SignalRApi.Controllers
     public class AboutController : ControllerBase
     {
         private readonly IAboutService _aboutService;
-
-        public AboutController(IAboutService aboutService)
+        private readonly IMapper _mapper;
+        public AboutController(IAboutService aboutService, IMapper mapper)
         {
             _aboutService = aboutService;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult AboutList()
         {
             var value=_aboutService.TGetListAll();
-            return Ok(value);
+            return Ok(_mapper.Map<List<ResultAboutDto>>(value));
         }
         [HttpPost]
         public IActionResult CreateAbout(CreateAboutDto createAboutDto)
         {
-            About about = new About()
-            {
-                Description = createAboutDto.Description,
-                ImageUrl = createAboutDto.ImageUrl,
-              Title = createAboutDto.Title,
-              
-            };
-            _aboutService.TInsert(about);
+            var value=_mapper.Map<About>(createAboutDto);
+            _aboutService.TInsert(value);
             return Ok("Hakkımda kısmı basarılı bir şekilde eklendi");
         }
         [HttpDelete]
@@ -45,21 +41,15 @@ namespace SignalRApi.Controllers
         [HttpPut]
         public IActionResult UpdateAbout(UpdateAboutDto updateAboutDto)
         {
-            About about = new About()
-            {
-                AboutId = updateAboutDto.AboutId,
-                Title = updateAboutDto.Title,   
-                Description = updateAboutDto.Description,
-                ImageUrl= updateAboutDto.ImageUrl,
-            };
-            _aboutService.TUpdate(about);
+            var value=_mapper.Map<About>(updateAboutDto);
+            _aboutService.TUpdate(value);
             return Ok("Güncelleme işleminiz başarılı bir şekilde gerçekleşti");
         }
         [HttpGet("GetAbout")]
         public IActionResult GetAbout(int id) 
         {
             var value=_aboutService.TGetById(id);
-            return Ok(value);
+            return Ok(_mapper.Map<GetAboutDto>(value));
         }
         
         

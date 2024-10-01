@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalRProject.BusinessLayer.Abstract;
 using SignalRProject.DtoLayer.DiscountDtos;
@@ -11,28 +12,24 @@ namespace SignalRApi.Controllers
     public class DiscountController : ControllerBase
     {
         private readonly IDiscountService _discountService;
+        private readonly IMapper _mapper;
 
-        public DiscountController(IDiscountService discountService)
+        public DiscountController(IDiscountService discountService, IMapper mapper)
         {
             _discountService = discountService;
+            _mapper = mapper;
         }
         [HttpGet]
         public IActionResult ListDiscount()
         {
             var value = _discountService.TGetListAll();
-            return Ok(value);
+            return Ok(_mapper.Map<List<ResultDiscountDto>>(value));
         }
         [HttpPost]
         public IActionResult CreateDiscount(CreateDiscountDto createDiscountDto)
         {
-            Discount discount = new Discount()
-            {
-                Amount = createDiscountDto.Amount,
-                Description = createDiscountDto.Description,
-                ImageUrl = createDiscountDto.ImageUrl,
-                Title = createDiscountDto.Title,
-            };
-            _discountService.TInsert(discount);
+           var value=_mapper.Map<Discount>(createDiscountDto);
+            _discountService.TInsert(value);
             return Ok("İşleminiz başarılı bir şekilde gerçekleşti");
         }
 
@@ -46,23 +43,15 @@ namespace SignalRApi.Controllers
         [HttpPut]
         public IActionResult UpdateDiscount(UpdateDiscountDto updateDiscountDto)
         {
-            Discount discount = new Discount()
-            {
-                Amount = updateDiscountDto.Amount,
-                Description = updateDiscountDto.Description,
-                ImageUrl = updateDiscountDto.ImageUrl,
-                Title = updateDiscountDto.Title,
-                DiscountId = updateDiscountDto.DiscountId
-            };
-
-            _discountService.TUpdate(discount);
+            var value=_mapper.Map<Discount>(updateDiscountDto);
+            _discountService.TUpdate(value);
             return Ok("İşleminiz başarılı bir şekilde gerçekleşti");
         }
         [HttpGet("GetDiscount")]
         public IActionResult GetDiscount(int id)
         {
             var value=_discountService.TGetById(id);
-            return Ok(value);
+            return Ok(_mapper.Map<GetDiscountDto>(value));
         }
         [HttpGet("ChangeStatusToFalse")]
         public IActionResult ChangeStatusToFalse(int id)

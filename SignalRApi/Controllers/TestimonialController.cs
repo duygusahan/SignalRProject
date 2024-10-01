@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalRProject.BusinessLayer.Abstract;
 using SignalRProject.DtoLayer.TestimonialDtos;
@@ -11,29 +12,24 @@ namespace SignalRApi.Controllers
     public class TestimonialController : ControllerBase
     {
         private readonly ITestimonialService _testimonialService;
+        private readonly IMapper _mapper;
 
-        public TestimonialController(ITestimonialService testimonialService)
+        public TestimonialController(ITestimonialService testimonialService, IMapper mapper)
         {
             _testimonialService = testimonialService;
+            _mapper = mapper;
         }
         [HttpGet]
         public IActionResult ListTestimonial()
         {
             var value = _testimonialService.TGetListAll();
-            return Ok(value);
+            return Ok(_mapper.Map<List<ResultTestimonialDto>>(value));
         }
         [HttpPost]
         public IActionResult CreateTestimonial(CreateTestimonialDto createTestimonialDto)
         {
-            Testimonial testimonial = new Testimonial()
-            {
-                Comment = createTestimonialDto.Comment,
-                ImageUrl = createTestimonialDto.ImageUrl,
-                Name = createTestimonialDto.Name,
-                Status = createTestimonialDto.Status,
-                Title = createTestimonialDto.Title,
-            };
-            _testimonialService.TInsert(testimonial);
+            var value=_mapper.Map<Testimonial>(createTestimonialDto);
+            _testimonialService.TInsert(value);
             return Ok("İşleminiz başarıyla gerçekleşti");
         }
 
@@ -46,16 +42,9 @@ namespace SignalRApi.Controllers
         [HttpPut]
         public IActionResult UpdateTestimonial(UpdateTestimonialDto updateTestimonialDto)
         {
-            Testimonial testimonial = new Testimonial() { 
-            Comment = updateTestimonialDto.Comment,
-            ImageUrl= updateTestimonialDto.ImageUrl,
-            Name = updateTestimonialDto.Name,
-            Status = updateTestimonialDto.Status,   
-            Title = updateTestimonialDto.Title, 
-            TestimonialId=updateTestimonialDto.TestimonialId,
-            };
+            var value = _mapper.Map<Testimonial>(updateTestimonialDto);
 
-            _testimonialService.TUpdate(testimonial);
+            _testimonialService.TUpdate(value);
             return Ok("İşleminiz başarıyla gerçekleşti");
         }
 
@@ -63,7 +52,7 @@ namespace SignalRApi.Controllers
         public IActionResult GetTestimonial(int id) 
         {
             var value=_testimonialService.TGetById(id);
-            return Ok(value);   
+            return Ok(_mapper.Map<GetTestimonialDto>(value));   
         }
 
         [HttpGet("GetTestimonialsByStatusTrue")]

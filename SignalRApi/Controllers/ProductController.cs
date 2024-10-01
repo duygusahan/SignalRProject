@@ -13,33 +13,26 @@ namespace SignalRApi.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
-        private readonly IMapper mapper;
+        private readonly IMapper _mapper;
 
         public ProductController(IProductService productService, IMapper mapper)
         {
             _productService = productService;
-            this.mapper = mapper;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult ProductList()
         {
-            var value = mapper.Map<List<ResultProductDto>>(_productService.TGetListAll());
-            return Ok(value);
+            var value =_productService.TGetListAll();
+            return Ok(_mapper.Map<List<ResultProductDto>>(value));
         }
         [HttpPost]
         public IActionResult CreateProduct(CreateProductDto createProductDto)
         {
-          
-            _productService.TInsert(new Product()
-            {
-                ProductName= createProductDto.ProductName,
-                Description= createProductDto.Description,
-                ImageUrl= createProductDto.ImageUrl,
-                Price= createProductDto.Price,
-                Status= createProductDto.Status,
-               CategoryId=createProductDto.CategoryId, 
-            });
+
+            var value = _mapper.Map<Product>(createProductDto);
+            _productService.TInsert(value);
             return Ok("İşleminiz başarıyla gerçekleşti");
         }
 
@@ -54,16 +47,8 @@ namespace SignalRApi.Controllers
         public IActionResult UpdateProduct(UpdateProductDto updateProductDto) 
         {
            
-            _productService.TUpdate(new Product()
-            {
-                Status = updateProductDto.Status,
-                ProductName= updateProductDto.ProductName,
-                Description= updateProductDto.Description,
-                ImageUrl= updateProductDto.ImageUrl,
-                Price= updateProductDto.Price,
-                ProductId= updateProductDto.ProductId,
-                CategoryId = updateProductDto.CategoryId,
-            });
+            var value=_mapper.Map<Product>(updateProductDto);
+            _productService.TUpdate(value);
             return Ok("İşleminiz başarıyla gerçekleşti");
         }
 
@@ -71,7 +56,7 @@ namespace SignalRApi.Controllers
         public IActionResult GetProduct(int id) 
         {
             var value= _productService.TGetById(id);
-            return Ok(value);
+            return Ok(_mapper.Map<GetProductDto>(value));
         }
 
         [HttpGet("GetProductsWithCategory")]

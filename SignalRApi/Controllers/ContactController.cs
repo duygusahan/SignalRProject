@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalRProject.BusinessLayer.Abstract;
 using SignalRProject.DtoLayer.ContactDtos;
@@ -11,29 +12,25 @@ namespace SignalRApi.Controllers
     public class ContactController : ControllerBase
     {
         private readonly IContactService _contactService;
+        private readonly IMapper _mapper;
 
-        public ContactController(IContactService contactService)
+        public ContactController(IContactService contactService, IMapper mapper)
         {
             _contactService = contactService;
+            _mapper = mapper;
         }
         [HttpGet]
         public IActionResult ContactList()
         {
             var value=_contactService.TGetListAll();
-            return Ok(value);
+            return Ok(_mapper.Map<List<ResultContactDto>>(value));
         }
         [HttpPost]
         public IActionResult CreateContact(CreateContactDto createContactDto)
         {
-            Contact contact = new Contact()
-            {
-                FooterDescription = createContactDto.FooterDescription,
-                Location= createContactDto.Location,
-                Mail= createContactDto.Mail,
-                PhoneNumber= createContactDto.PhoneNumber,
-            };
+            var value = _mapper.Map<Contact>(createContactDto);
 
-            _contactService.TInsert(contact);
+            _contactService.TInsert(value);
             return Ok("İşleminiz başarılı bir şekilde gerçekleşti"); 
         }
         [HttpDelete]
@@ -45,20 +42,8 @@ namespace SignalRApi.Controllers
         [HttpPut]
         public IActionResult UpdateContact(UpdateContactDto updateContactDto)
         {
-            Contact contact = new Contact()
-            {
-                ContactId = updateContactDto.ContactId,
-                FooterDescription = updateContactDto.FooterDescription,
-                Location = updateContactDto.Location,
-                Mail = updateContactDto.Mail,
-                PhoneNumber = updateContactDto.PhoneNumber,
-                FooterTitle= updateContactDto.FooterTitle,
-                OpenDays= updateContactDto.OpenDays,
-                OpenDaysDescription= updateContactDto.OpenDaysDescription,
-                OpenHours= updateContactDto.OpenHours,
-
-            };
-            _contactService.TUpdate(contact);
+            var value=_mapper.Map<Contact>(updateContactDto);
+            _contactService.TUpdate(value);
             return Ok("İşleminiz başarılı bir şekilde gerçekleşti");
         }
 
@@ -66,7 +51,7 @@ namespace SignalRApi.Controllers
         public IActionResult GetContact(int id) 
         {
             var value=_contactService.TGetById(id);
-            return Ok(value);
+            return Ok(_mapper.Map<GetContactDto>(value));
         }
     }
 }

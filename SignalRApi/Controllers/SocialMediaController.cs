@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalRProject.BusinessLayer.Abstract;
 using SignalRProject.DtoLayer.SocialMediaDtos;
@@ -11,27 +12,24 @@ namespace SignalRApi.Controllers
     public class SocialMediaController : ControllerBase
     {
         private readonly ISocialMediaService _socialMediaService;
+        private readonly IMapper _mapper;
 
-        public SocialMediaController(ISocialMediaService socialMediaService)
+        public SocialMediaController(ISocialMediaService socialMediaService, IMapper mapper)
         {
             _socialMediaService = socialMediaService;
+            _mapper = mapper;
         }
         [HttpGet]
         public IActionResult SocialMediaList()
         {
             var value = _socialMediaService.TGetListAll();
-            return Ok(value);
+            return Ok(_mapper.Map<List<ResultSocialMediaDto>>(value));
         }
         [HttpPost]
         public IActionResult CreateSocialMedia(CreateSocialMediaDto createSocialMediaDto)
         {
-            SocialMedia socialMedia = new SocialMedia()
-            {
-                Icon = createSocialMediaDto.Icon,
-                Title = createSocialMediaDto.Title,
-                Url = createSocialMediaDto.Url,
-            };
-            _socialMediaService.TInsert(socialMedia);
+            var value=_mapper.Map<SocialMedia>(createSocialMediaDto);
+            _socialMediaService.TInsert(value);
             return Ok("İşleminiz başarıyla gerçekleşti"); 
         }
         [HttpDelete]
@@ -43,21 +41,15 @@ namespace SignalRApi.Controllers
         [HttpPut]
         public IActionResult UpdateSocialMedia(UpdateSocialMedia updateSocialMedia)
         {
-            SocialMedia socialMedia = new SocialMedia()
-            {
-                Icon=updateSocialMedia.Icon,
-                Title=updateSocialMedia.Title,
-                Url = updateSocialMedia.Url,
-                SocialMediaId=updateSocialMedia.SocialMediaId,
-            };
-            _socialMediaService.TUpdate(socialMedia);
+           var value=_mapper.Map<SocialMedia>(updateSocialMedia);
+            _socialMediaService.TUpdate(value);
             return Ok("İşleminiz başarıyla gerçekleşti");
         }
         [HttpGet("GetSocialMedia")]
         public IActionResult GetSocialMedia(int id) 
         {
             var value=_socialMediaService.TGetById(id);
-            return Ok(value);
+            return Ok(_mapper.Map<GetSocialMediaDto>(value));
         }
 
     }
