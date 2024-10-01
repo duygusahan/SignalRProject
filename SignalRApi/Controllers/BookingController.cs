@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SignalRProject.BusinessLayer.Abstract;
@@ -13,11 +14,13 @@ namespace SignalRApi.Controllers
     {
         private readonly IBookingService _bookingService;
         private readonly IMapper _mapper;
+        private readonly IValidator<CreateBookingDto> _validator;
 
-        public BookingController(IBookingService bookingService, IMapper mapper)
+        public BookingController(IBookingService bookingService, IMapper mapper, IValidator<CreateBookingDto> validator)
         {
             _bookingService = bookingService;
             _mapper = mapper;
+            _validator = validator;
         }
         [HttpGet]
         public IActionResult BookingList()
@@ -28,7 +31,14 @@ namespace SignalRApi.Controllers
         [HttpPost]
         public IActionResult CreateBooking(CreateBookingDto createBookingDto)
         {
-            var value=_mapper.Map<Booking>(createBookingDto);
+            var validationResult = _validator.Validate(createBookingDto);
+            if (!validationResult.IsValid) 
+            {
+                return BadRequest(validationResult.Errors);
+            }
+
+
+            var value = _mapper.Map<Booking>(createBookingDto);
 
             _bookingService.TInsert(value);
             return Ok("İşleminiz başarılı bir şekilde gerçekleşti");
@@ -40,32 +50,32 @@ namespace SignalRApi.Controllers
             return Ok("İşleminiz başarılı bir şekilde gerçekleşti");
         }
         [HttpPut]
-        public IActionResult UpdateBooking(UpdateBookingDto updateBookingDto) 
+        public IActionResult UpdateBooking(UpdateBookingDto updateBookingDto)
         {
-            var value=_mapper.Map<Booking>(updateBookingDto);
+            var value = _mapper.Map<Booking>(updateBookingDto);
             _bookingService.TUpdate(value);
             return Ok("İşleminiz başarılı bir şekilde gerçekleşti");
         }
         [HttpGet("GetBooking")]
-        public IActionResult GetBooking(int id) 
+        public IActionResult GetBooking(int id)
         {
-            var value=_bookingService.TGetById(id);
+            var value = _bookingService.TGetById(id);
             return Ok(_mapper.Map<GetBookingDto>(value));
         }
 
         [HttpGet("BookingStatusApproved")]
         public IActionResult BookingStatusApproved(int id)
         {
-           _bookingService.TBookingStatusApproved(id);
+            _bookingService.TBookingStatusApproved(id);
             return Ok("Rezarvasyon Açıklaması Değiştirildi");
         }
 
-		[HttpGet("BookingStatusCancelled")]
-		public IActionResult BookingStatusCancelled(int id)
-		{
-			_bookingService.TBookingStatusCancelled(id);
-			return Ok("Rezarvasyon Açıklaması Değiştirildi");
-		}
+        [HttpGet("BookingStatusCancelled")]
+        public IActionResult BookingStatusCancelled(int id)
+        {
+            _bookingService.TBookingStatusCancelled(id);
+            return Ok("Rezarvasyon Açıklaması Değiştirildi");
+        }
 
-	}
+    }
 }

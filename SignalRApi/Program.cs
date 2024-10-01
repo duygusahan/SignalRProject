@@ -1,9 +1,12 @@
+using FluentValidation;
 using SignalRApi.Hubs;
 using SignalRProject.BusinessLayer.Abstract;
 using SignalRProject.BusinessLayer.Concrete;
+using SignalRProject.BusinessLayer.ValidationRules.BookingValidations;
 using SignalRProject.DataAccessLayer.Abstract;
 using SignalRProject.DataAccessLayer.Context;
 using SignalRProject.DataAccessLayer.EntityFramework;
+using SignalRProject.DtoLayer.BookingDtos;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
@@ -72,6 +75,8 @@ builder.Services.AddScoped<INotificationDal , EfNotificationDal >();
 
 builder.Services.AddScoped<IMessageDal , EfMessageDal>();
 builder.Services.AddScoped<IMessageService , MessageManager >();
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateBookingValidation>();
 
 builder.Services.AddControllersWithViews()
     .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
